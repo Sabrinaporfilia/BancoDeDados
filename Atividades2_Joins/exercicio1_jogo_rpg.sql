@@ -1,15 +1,42 @@
 USE  db_generation_game_online;
 
+
+CREATE TABLE tb_classes(
+id bigint auto_increment,
+nome_classe varchar(255) not null,
+armamento varchar(255) not null,
+primary key (id)
+);
+
+
+INSERT INTO tb_classes (nome_classe, armamento)
+values ("Guerreiro","Espada");
+INSERT INTO tb_classes (nome_classe, armamento)
+values ("Arqueiro","Arco");
+INSERT INTO tb_classes (nome_classe, armamento)
+values ("Mago","Cajado");
+INSERT INTO tb_classes (nome_classe, armamento)
+values ("Ninja","Kunai");
+INSERT INTO tb_classes (nome_classe, armamento)
+values ("Necromante","Orbe");
+INSERT INTO tb_classes (nome_classe, armamento)
+values ("Curandeiro","Livro");
+
 CREATE TABLE tb_personagens(
 id bigint auto_increment,
 primary key(id),
 nome varchar(255) not null,
 ataque int not null,
 defesa int not null,
-habilidade varchar(255) not null,
-classe_id bigint,
-FOREIGN KEY (classe_id) REFERENCES tb_classes(id)
+habilidade varchar(255) not null
+-- classe_id bigint,
+-- FOREIGN KEY (classe_id) REFERENCES tb_classes(id)
 );
+
+ALTER TABLE tb_personagens ADD classe_id bigint;
+ALTER TABLE tb_personagens ADD CONSTRAINT fk_personagens_classes
+FOREIGN KEY (classe_id) REFERENCES tb_classes(id);
+
 
 INSERT INTO tb_personagens (nome, ataque, defesa, habilidade, classe_id)
 values ("Jimin", 3000, 2000,"Se cura 25% mais rápido a cada abate", 2);
@@ -29,19 +56,15 @@ INSERT INTO tb_personagens (nome, ataque, defesa, habilidade, classe_id)
 values ("Willy", 2278, 3845,"Com sua magia, pode mover inimigos", 2);
 
 
--- ALTER TABLE tb_personagens ADD classe_id bigint;
--- ALTER TABLE tb_personagens ADD CONSTRAINT fk_personagens_classes
--- FOREIGN KEY (classe_id) REFERENCES tb_classes(id);
-
 SELECT * FROM tb_personagens WHERE ataque > 2000;
 
 SELECT * FROM tb_personagens WHERE defesa BETWEEN 1000 AND 2000;
 
 SELECT * FROM tb_personagens WHERE nome LIKE "%C%";
 
-SELECT tb_personagens.*, tb_classes.nome_classe FROM tb_personagens
+SELECT tb_personagens.*, tb_classes.* FROM tb_personagens
 INNER JOIN tb_classes ON tb_personagens.classe_id = tb_classes.id;
 
 SELECT * from tb_personagens
-INNER JOIN tb_classes ON tb_classes.id = tb_personagens.classe_id WHERE tb_classes.nome_classe = "arqueiro";
+INNER JOIN tb_classes ON tb_classes.id = tb_personagens.classe_id WHERE nome_classe = "arqueiro";
 
